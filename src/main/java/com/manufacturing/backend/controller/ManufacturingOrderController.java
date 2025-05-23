@@ -43,7 +43,7 @@ public class ManufacturingOrderController {
      * @param id Manufacturing order ID
      * @return ResponseEntity containing the order if found, or 404 Not Found
      */
-    @GetMapping("/{id}")
+    @GetMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<ManufacturingOrder> getOrderById(
             @PathVariable String id
     ) {
@@ -69,7 +69,7 @@ public class ManufacturingOrderController {
         return ResponseEntity.ok(savedOrder);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<ManufacturingOrder> updateOrder(
             @PathVariable String id,
             @Valid @RequestBody UpdateManufacturingOrderPayload payload) {
@@ -78,14 +78,14 @@ public class ManufacturingOrderController {
         return ResponseEntity.ok(updatedOrder);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteOrder(@PathVariable String id) {
         Long orderId = Long.parseLong(id);
         this.manufacturingOrderService.deleteOrder(orderId);
         return ResponseEntity.ok("Manufacturing order deleted successfully.");
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping(path = {"/{id}/status", "/{id}/status/"})
     public ResponseEntity<ManufacturingOrder> updateOrderStatus(
             @PathVariable String id,
             @Valid @RequestBody
@@ -120,7 +120,8 @@ public class ManufacturingOrderController {
     public Map<String, String> handleMessageNotReadable(HttpMessageNotReadableException ex) {
         String message = ex.getMessage();
         if (message.contains("ManufacturingOrderStatus")) {
-            return Map.of("type", "Invalid manufacturing order status. Must be one of: PENDING, IN_PROGRESS, COMPLETED");
+            String validStatuses = String.join(", ", java.util.Arrays.stream(com.manufacturing.backend.common.ManufacturingOrderStatus.values()).map(Enum::name).toList());
+            return Map.of("type", "Invalid manufacturing order status. Must be one of: " + validStatuses);
         }
         return Map.of("error", "Invalid request body: " + message);
     }

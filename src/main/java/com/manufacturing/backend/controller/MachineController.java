@@ -56,7 +56,7 @@ public class MachineController {
      * @return ResponseEntity containing the updated machine if found, or 404 Not Found
      */
 
-    @PutMapping("/{id}")
+    @PutMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<Machine> updateMachine(
             @PathVariable Long id,
             @Valid @RequestBody MachinePayload payload
@@ -71,7 +71,7 @@ public class MachineController {
      *
      * @param id Machine ID
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteMachine(@PathVariable Long id) {
         this.machineService.deleteMachine(id);
         return ResponseEntity.ok("Machine deleted successfully");

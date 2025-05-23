@@ -54,7 +54,7 @@ public class EmployeeController {
      * @return ResponseEntity containing the updated employee if found, or 404 Not Found
      */
 
-    @PutMapping("/{id}")
+    @PutMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<Employee> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeePayload payload
@@ -69,7 +69,7 @@ public class EmployeeController {
      *
      * @param id Employee ID
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = {"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
         this.employeeService.deleteEmployee(id);
         return ResponseEntity.ok("Employee deleted successfully");
