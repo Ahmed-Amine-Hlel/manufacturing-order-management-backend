@@ -54,7 +54,7 @@ public class ProductController {
      * @return ResponseEntity containing the product if found, or 404 Not Found
      */
 
-    @PutMapping("/{id}")
+    @PutMapping({"/{id}", "/{id}/"})
     public ResponseEntity<Product> updateProduct(
             @PathVariable Long id,
             @Valid @RequestBody ProductPayload payload
@@ -69,7 +69,7 @@ public class ProductController {
      *
      * @param id Product ID
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping({"/{id}", "/{id}/"})
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         this.productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
