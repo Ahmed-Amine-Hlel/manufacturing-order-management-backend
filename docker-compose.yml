@@ -13,5 +13,16 @@ services:
       - manufacturing_order_management_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  backend:
+    build: .
+    container_name: manufacturing_order_management_backend
+    ports:
+      - '8082:8082'
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+    restart: unless-stopped
+
 volumes:
   manufacturing_order_management_data:
