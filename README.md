@@ -16,6 +16,7 @@ A robust Spring Boot backend for managing manufacturing orders, machines, produc
 - **CORS Support**: Configured for cross-origin requests.
 - **PostgreSQL Integration**: Uses PostgreSQL for persistent storage.
 - **Auditing**: Automatic tracking of creation and modification timestamps.
+- **Dockerized Deployment**: Easily run the backend and database using Docker and Docker Compose.
 
 ---
 
@@ -26,7 +27,7 @@ A robust Spring Boot backend for managing manufacturing orders, machines, produc
 - **Spring Data JPA**
 - **Lombok**
 - **PostgreSQL**
-- **Docker Compose** (for local database)
+- **Docker & Docker Compose**
 
 ---
 
@@ -42,7 +43,8 @@ A robust Spring Boot backend for managing manufacturing orders, machines, produc
 │   └── service/        # Business Logic
 ├── src/main/resources
 │   └── application.properties
-├── docker-compose.yml  # PostgreSQL setup
+├── docker-compose.yml  # Docker Compose setup for backend & PostgreSQL
+├── Dockerfile          # Docker image for backend
 ├── pom.xml             # Maven configuration
 └── ...
 ```
@@ -55,7 +57,7 @@ A robust Spring Boot backend for managing manufacturing orders, machines, produc
 
 - Java 17+
 - Maven
-- Docker (for local PostgreSQL)
+- Docker & Docker Compose
 
 ### 1. Clone the Repository
 
@@ -64,27 +66,39 @@ git clone <your-repo-url>
 cd manufacturing-order-management-backend
 ```
 
-### 2. Start PostgreSQL with Docker
+### 2. Run with Docker Compose (Recommended)
+
+You can run both the backend and PostgreSQL database using Docker Compose:
 
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-This will start a PostgreSQL instance on port `5433` with the database `manufacturing_order_management_db`.
+- The backend will be available on port `8082`.
+- PostgreSQL will be available on port `5433` (mapped to container's `5432`).
+- To stop the services, press `Ctrl+C` if running in the foreground, or run `docker-compose down` in another terminal.
 
-### 3. Configure Application Properties
+#### Environment Variables
 
-The default configuration is set for local development:
+The backend is configured to use the following database connection (see `src/main/resources/application.properties`):
 
 ```
-src/main/resources/application.properties
+spring.datasource.url=jdbc:postgresql://postgres:5432/manufacturing_order_management_db
+spring.datasource.username=postgres
+spring.datasource.password=postgres
 ```
 
-- `spring.datasource.url=jdbc:postgresql://localhost:5433/manufacturing_order_management_db`
-- `spring.datasource.username=postgres`
-- `spring.datasource.password=postgres`
+> **Note:** When running locally (without Docker), use `localhost:5433` as the host and port for PostgreSQL.
 
-### 4. Build and Run the Application
+### 3. (Alternative) Start PostgreSQL with Docker Only
+
+If you only want to run the database in Docker and the backend locally:
+
+```bash
+docker-compose up -d postgres
+```
+
+Then run the backend with Maven:
 
 ```bash
 ./mvnw spring-boot:run
@@ -95,8 +109,6 @@ Or, on Windows:
 ```bat
 mvnw.cmd spring-boot:run
 ```
-
-The backend will start on port `8082`.
 
 ---
 
